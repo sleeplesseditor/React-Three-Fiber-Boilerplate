@@ -8,7 +8,7 @@ import { Lights } from './Lights';
 
 export default function App() {
   return (
-    <Canvas camera={{ position: [-1, 4, 2.5] }}>
+    <Canvas camera={{ position: [-1, 4, 2.5] }} shadows>
         <Lights />
         <Polyhedron
         name="meshBasicMaterial"

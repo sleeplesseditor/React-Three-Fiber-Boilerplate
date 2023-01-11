@@ -1,27 +1,43 @@
 import * as React from 'react';
+import { useControls } from 'leva';
+import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 
-export default function Polyhedron ({ polyhedron, colour, ...props }) {
+export default function Polyhedron (props) {
     const ref = React.useRef();
-    const [count, setCount] = React.useState(0);
-
-    console.log(polyhedron);
-
     useFrame((_, delta) => {
-        ref.current.rotation.x += delta
-        ref.current.rotation.y += 0.5 * delta   
+        ref.current.rotation.x += 0.2 * delta
+        ref.current.rotation.y += 0.05 * delta   
     });
+
+    useControls((props.name), {
+        wireframe: {
+            value: false,
+            onChange: (v) => {
+              ref.current.material.wireframe = v
+            },
+        },
+        flatShading: {
+            value: true,
+            onChange: (v) => {
+              ref.current.material.flatShading = v
+              ref.current.material.needsUpdate = true
+            },
+        },
+        color: {
+            value: 'lime',
+            onChange: (v) => {
+              ref.current.material.color = new THREE.Color(v)
+            },
+        },
+    })
 
     return (
         <mesh  
             {...props}
-            geometry={polyhedron[count]}
-            onPointerDown={() => {
-                setCount((count + 1) % 3)
-            }}
             ref={ref}
         >
-            <meshBasicMaterial color={colour} wireframe />
+            <icosahedronGeometry args={[1, 1]} />
         </mesh>
     )
 };

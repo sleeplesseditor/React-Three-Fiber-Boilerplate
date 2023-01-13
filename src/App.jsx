@@ -1,40 +1,24 @@
 
 import { Canvas, useLoader } from '@react-three/fiber';
-import Polyhedron from './Polyhedron';
-import * as THREE from 'three';
 import * as React from 'react';
-import { OrbitControls, Stats } from '@react-three/drei';
-import Floor from './Floor';
-import { Lights } from './Lights';
+import { Circle, OrbitControls, Stats } from '@react-three/drei';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 export default function App() {
-  const texture = useLoader(THREE.TextureLoader, './img/grid.png');
+  const gltf = useLoader(GLTFLoader, './models/monkey.glb');
 
   return (
-    <Canvas camera={{ position: [-1, 4, 2.5] }} shadows>
-        <Lights />
-        <Polyhedron
-        name="meshBasicMaterial"
-        position={[-3, 1, 0]}
-        material={new THREE.MeshBasicMaterial({ map: texture })}
-      />
-      <Polyhedron
-        name="meshNormalMaterial"
-        position={[-1, 1, 0]}
-        material={new THREE.MeshNormalMaterial({ flatShading: true })}
-      />
-      <Polyhedron
-        name="meshPhongMaterial"
-        position={[1, 1, 0]}
-        material={new THREE.MeshPhongMaterial({ flatShading: true, map: texture })}
-      />
-      <Polyhedron
-        name="meshStandardMaterial"
-        position={[3, 1, 0]}
-        material={new THREE.MeshStandardMaterial({ flatShading: true, map: texture })}
-      />
-        <Floor />
-        <OrbitControls target={[2, 2, 0]} />
+    <Canvas camera={{ position: [-0.5, 1, 2] }} shadows>
+        <directionalLight castShadow position={[3.3, 1.0, 4.4]} />
+        <primitive
+          children-0-castShadow
+          object={gltf.scene}
+          position={[0, 1, 0]}
+        />
+        <Circle args={[10]} rotation-x={-Math.PI / 2} receiveShadow>
+          <meshStandardMaterial />
+        </Circle>
+        <OrbitControls target={[0, 1, 0]} />
         <axesHelper args={[5]}/>
         <gridHelper />
         <Stats />

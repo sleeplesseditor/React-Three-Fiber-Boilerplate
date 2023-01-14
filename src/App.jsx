@@ -1,24 +1,26 @@
 
-import { Canvas, useLoader } from '@react-three/fiber';
+import { Canvas } from '@react-three/fiber';
 import * as React from 'react';
-import { Environment, OrbitControls, Stats } from '@react-three/drei';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { ContactShadows, OrbitControls, Stats } from '@react-three/drei';
+import { Leva } from 'leva';
+import { Env } from './Env';
+import { Model } from './Model';
 
 export default function App() {
-  const gltf = useLoader(GLTFLoader, './models/monkey.glb');
-
   return (
-    <Canvas camera={{ position: [-0.5, 1, 2] }}>
-        <Environment background blur={0.5} files="./img/venice_sunset_4k.hdr" />
-        <directionalLight castShadow position={[3.3, 1.0, 4.4]} intensity={4} />
-        <primitive
-          object={gltf.scene}
-          position={[0, 1, 0]}
+    <>
+      <Canvas camera={{ position: [-8, 5, 8] }}>
+        <Env />
+        <Model />
+        <ContactShadows 
+          opacity={1.5}
+          position={[0.33, -0.33, 0.33]}
+          scale={150}
         />
-        <OrbitControls target={[0, 1, 0]} autoRotate />
-        <axesHelper args={[5]}/>
-        <gridHelper />
+        <OrbitControls target={[0, 1, 0]} maxPolarAngle={Math.PI / 2} />
         <Stats />
-    </Canvas>
+      </Canvas>
+      <Leva collapsed />
+    </>
   )
 }

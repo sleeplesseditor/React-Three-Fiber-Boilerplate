@@ -1,26 +1,40 @@
 
 import { Canvas } from '@react-three/fiber';
 import * as React from 'react';
-import { ContactShadows, OrbitControls, Stats } from '@react-three/drei';
-import { Leva } from 'leva';
-import { Env } from './Env';
-import { Model } from './Model';
+import { Environment, OrbitControls, Stats, useGLTF } from '@react-three/drei';
+import { useControls } from 'leva';
+
+const Models = [
+  { title: 'Hammer', url: './models/hammer.glb' },
+  { title: 'Drill', url: './models/drill.glb' },
+  { title: 'Tape Measure', url: './models/tapeMeasure.glb' },
+];
+
+function Model({ url }) {
+  const { scene } = useGLTF(url)
+  return <primitive object={scene} />
+}
 
 export default function App() {
+  const { title } = useControls({
+    title: {
+      options: Models.map(({ title }) => title),
+    },
+  });
+
   return (
     <>
-      <Canvas camera={{ position: [-8, 5, 8] }}>
-        <Env />
-        <Model />
-        <ContactShadows 
-          opacity={1.5}
-          position={[0.33, -0.33, 0.33]}
-          scale={150}
-        />
-        <OrbitControls target={[0, 1, 0]} maxPolarAngle={Math.PI / 2} />
+      <Canvas camera={{ position: [0, 0, -0.2], near: 0.025 }}>
+        <Environment files="./img/workshop_1k.hdr" background />
+        <group>
+          <Model 
+            url={Models[Models.findIndex((m) => m.title === title)].url}
+          />
+        </group>
+        <OrbitControls autoRotate />
         <Stats />
       </Canvas>
-      <Leva collapsed />
+      <span id="info">The {title} is selected</span>
     </>
   )
 }

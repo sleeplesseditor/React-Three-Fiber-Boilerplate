@@ -1,7 +1,7 @@
 import { Canvas } from '@react-three/fiber';
 import CustomBox from './CustomBox';
 import { Stats, OrbitControls } from '@react-three/drei';
-import useKeyboard from './useKeyboard';
+import useKeyboard from './helpers/useKeyboard';
 
 export default function App() {
   const keyMap = useKeyboard()
